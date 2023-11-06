@@ -1,0 +1,199 @@
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 2);
+            padding: 2px;
+            margin: 20px;
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .p {
+            font-size: 24px;
+            margin-bottom: 10px;
+            border: solid 2px black;
+            margin-left: -250px;
+            
+        }
+        .s {
+            font-size: 24px;
+            border: solid 2px purple;
+            
+        }
+        .e {
+            font-size: 24px;
+            border: solid 2px pink;
+        }
+
+
+
+    </style>
+</head>
+
+<body>
+
+    <button onclick="listarTodos()">Carregar personagens</button>
+    <!-- <button onclick="listarPeloId(4)">Listar um único registro</button>
+    <button onclick="salvar()">Salvar registro</button>
+    <button onclick="alterar()">Alterar registro</button>
+    <button onclick="deletar(1)">Deletar registro</button> -->
+
+    <div id="listaPersonagens">
+        Carregando os personagens ....
+    </div>
+
+
+</body>
+
+
+<script>
+    // https://jsonplaceholder.typicode.com/
+// https://reqres.in/
+// https://rickandmortyapi.com/
+// https://pokeapi.co/docs/v2#pokemon-section
+
+
+function listarTodos() {
+    var xhttp = new XMLHttpRequest();
+
+    // definindo o tipo de retorno do meu objeto xhttp
+    xhttp.responseType = "json";
+
+    xhttp.onreadystatechange = function () {
+
+        // status da requisição já retornada para o browser
+        if (this.readyState == 4) {
+            console.log(xhttp);
+            console.log(xhttp.response);
+
+            const personagens = xhttp.response.results;
+            console.log(personagens);
+
+            const divListaPersonagens = document.getElementById('listaPersonagens');
+            divListaPersonagens.innerHTML = '';
+
+            personagens.forEach(function(personagem){
+                divListaPersonagens.innerHTML += `
+                    <div class="card">
+                        <p class="p">${personagem.name}</p>
+                        <img src="${personagem.image}">
+                        <p class="e">${personagem.especie}</p>
+                        <p class="s">${personagem.status}</p>
+                    </div>
+                `;
+            });
+        }  
+        
+    };
+
+    xhttp.open("GET", "https://rickandmortyapi.com/api/character");
+    xhttp.send();
+}
+
+function listarPeloId(id) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.responseType = "json";
+
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(xhttp);
+            console.log(this.response);
+
+            if(this.status == 200){
+                alert("O registro foi encontrado com sucesso!");
+            }else{
+                alert("Algo deu errado.");
+            }
+        }        
+    };
+
+    xhttp.open("GET", "https://jsonplaceholder.typicode.com/posts/" + id, true);
+    xhttp.send();
+}
+
+function salvar() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.responseType = "json";
+
+    var objeto = {
+        title: "Teste"
+    };
+
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            console.log(xhttp);
+            console.log(this.response);
+
+            if(this.status == 201){
+                alert("Registro salvo com sucesso!");
+            }else{
+                alert("Algo deu errado.");
+            }
+        }   
+    };
+
+    xhttp.open("POST", "https://jsonplaceholder.typicode.com/posts", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(objeto)); 
+}
+
+function alterar() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.responseType = "json";
+
+    var objeto = {
+        id: 1,
+        title: "Teste"
+    };
+
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            console.log(xhttp);
+            console.log(this.response);
+
+            if(this.status == 200){
+                alert("Registro alterado com sucesso!");
+            }else{
+                alert("Algo deu errado.");
+            }
+        }  
+    };
+
+    xhttp.open("PUT", "https://jsonplaceholder.typicode.com/posts/" + objeto.id, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(objeto)); 
+}
+
+function deletar(id) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.responseType = "json";
+
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            console.log(xhttp);
+            console.log(this.response);
+
+            if(this.status == 200){
+                alert("Registro excluído com sucesso!");
+            }else{
+                alert("Algo deu errado.");
+            }
+        }        
+    };
+
+    xhttp.open("DELETE", "https://jsonplaceholder.typicode.com/posts/" + id, true);
+    xhttp.send();  
+}
+</script>
+</html>
